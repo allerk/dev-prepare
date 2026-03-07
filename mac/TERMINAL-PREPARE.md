@@ -1,79 +1,79 @@
-# Гайд: Настройка профессионального терминала на macOS (Zsh + P10k + Tmux + Claude)
+# Guide: Setting up a professional terminal on macOS (Zsh + P10k + Tmux + Claude)
 
-Этот документ содержит пошаговую инструкцию по созданию интерфейса терминала с Zsh, Powerlevel10k, Tmux и Claude Code, как на скриншоте.
+This document is a step-by-step guide for setting up a terminal environment with Zsh, Powerlevel10k, Tmux and Claude Code.
 
 ---
 
-## 1. Подготовка: Установка Homebrew
+## 1. Prerequisites: Install Homebrew
 
-Если менеджер пакетов Homebrew еще не установлен, выполните эту команду:
+If the Homebrew package manager is not installed yet, run this command:
 
 ```bash
-/bin/bash -c "$(curl -fsSL [https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh](https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh))"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 ---
 
-## 2. Шрифты (Nerd Fonts)
+## 2. Fonts (Nerd Fonts)
 
-Для корректного отображения иконок (Apple, Git, стрелочки) необходим специальный шрифт, иначе вместо иконок будут квадраты.
+A Nerd Font is required for icons (Apple logo, Git symbols, arrows) to render correctly. Without it you will see empty squares instead of icons.
 
-1. Установите шрифт через brew:
+1. Install the font via Homebrew:
 ```bash
 brew install --cask font-jetbrains-mono-nerd-font
 ```
 
-2. **Настройка приложения:** Зайдите в настройки вашего терминала (iTerm2 или стандартный Terminal) -> **Profiles** -> **Text** -> **Font** и выберите **JetBrainsMono Nerd Font**.
+2. **Apply in your terminal app:** Open your terminal settings (iTerm2 or the default Terminal) → **Profiles** → **Text** → **Font** and select **JetBrainsMono Nerd Font**.
 
 ---
 
-## 3. Настройка оболочки Zsh и темы Powerlevel10k
+## 3. Zsh shell and Powerlevel10k theme
 
-1. Установите **Oh My Zsh**:
+1. Install **Oh My Zsh**:
 ```bash
-sh -c "$(curl -fsSL [https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh](https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh))"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-2. Скачайте тему **Powerlevel10k**:
+2. Clone the **Powerlevel10k** theme:
 ```bash
-git clone --depth=1 [https://github.com/romkatv/powerlevel10k.git](https://github.com/romkatv/powerlevel10k.git) ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 ```
 
-3. Активируйте тему в конфиге:
-- Откройте файл конфигурации: `nano ~/.zshrc`
-- Найдите строку `ZSH_THEME="..."` и замените её на: `ZSH_THEME="powerlevel10k/powerlevel10k"`
-- Сохраните изменения (Ctrl+O, Enter, Ctrl+X).
+3. Activate the theme:
+- Open your config: `nano ~/.zshrc`
+- Find the line `ZSH_THEME="..."` and replace it with: `ZSH_THEME="powerlevel10k/powerlevel10k"`
+- Save and exit (Ctrl+O, Enter, Ctrl+X).
 
-4. Перезапустите терминал. Автоматически запустится мастер настройки (`p10k configure`). Выбирайте стиль **Rainbow** и разделители **Slanted** для эффекта "стрелочек".
+4. Restart the terminal. The setup wizard (`p10k configure`) will launch automatically. Choose the **Rainbow** style and **Slanted** separators to get the arrow segment effect.
 
 ---
 
-## 4. Полезные плагины (Автодополнение и подсветка)
+## 4. Useful plugins (autosuggestions and syntax highlighting)
 
-Установите плагины, чтобы терминал подсказывал команды серым цветом:
+Install plugins to get inline gray command suggestions as you type:
 
 ```bash
-git clone [https://github.com/zsh-users/zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone [https://github.com/zsh-users/zsh-syntax-highlighting.git](https://github.com/zsh-users/zsh-syntax-highlighting.git) ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 ```
 
-Откройте `nano ~/.zshrc`, найдите строку `plugins=(git)` и замените её на:
+Open `nano ~/.zshrc`, find the line `plugins=(git)` and replace it with:
 ```text
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 ```
-После этого примените изменения командой: `source ~/.zshrc`
+Then apply the changes: `source ~/.zshrc`
 
 ---
 
-## 5. Настройка Tmux (Нижний статус-бар)
+## 5. Tmux (bottom status bar)
 
-1. Установите **tmux** и менеджер плагинов **TPM**:
+1. Install **tmux** and the **TPM** plugin manager:
 ```bash
 brew install tmux
-git clone [https://github.com/tmux-plugins/tpm](https://github.com/tmux-plugins/tpm) ~/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
-2. Создайте файл конфигурации: `nano ~/.tmux.conf` и вставьте туда следующий блок:
+2. Create the config file: `nano ~/.tmux.conf` and paste the following:
 ```tmux
 set -g mouse on
 set -g @plugin 'tmux-plugins/tpm'
@@ -82,32 +82,32 @@ set -g @catppuccin_flavour 'mocha'
 set -g @catppuccin_window_tabs_enabled on
 run '~/.tmux/plugins/tpm/tpm'
 ```
-3. Сохраните файл. Запустите tmux командой `tmux`. Находясь в tmux, нажмите `Ctrl + B`, отпустите, а затем нажмите `I` (заглавную), чтобы установить тему Catppuccin.
+3. Save the file. Start tmux with `tmux`. Inside tmux, press `Ctrl+B`, release, then press `I` (uppercase) to install the Catppuccin theme.
 
 ---
 
-## 6. Установка Claude Code (Инструмент со скрина)
+## 6. Install Claude Code
 
-1. Установите Node.js (если его еще нет): 
+1. Install Node.js if not already installed:
 ```bash
 brew install node
 ```
 
-2. Установите Claude Code:
+2. Install Claude Code:
 ```bash
 npm install -g @anthropic-ai/claude-code
 ```
 
-3. Для запуска просто введите:
+3. Launch it:
 ```bash
 claude
 ```
 
 ---
 
-## Финальный результат
+## End result
 
-Чтобы получить вид ровно как на скриншоте, ваш сценарий использования будет таким:
-1. Открываете терминал.
-2. Вводите `tmux` (появляется фиолетовая нижняя панель с вкладками).
-3. Вводите `claude` (запускается интерфейс ИИ-ассистента).
+To get the full setup running:
+1. Open the terminal.
+2. Type `tmux` — the Catppuccin status bar appears at the bottom.
+3. Type `claude` — the Claude Code interface launches.
