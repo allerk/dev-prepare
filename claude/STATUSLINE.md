@@ -64,7 +64,26 @@ The statusline appears at the bottom of the Claude Code interface after restart.
 
 ## OS-specific changes
 
-The script works out of the box on **macOS**. On **Linux**, three lines need to be changed.
+The script works out of the box on **macOS**. On **Linux** and **Windows**, specific lines need to be changed — see each section below.
+
+### Windows
+
+There are two ways to run the script on Windows:
+
+**Option A — WSL (recommended):** Use the Linux instructions below as-is. WSL provides a full Linux environment; no further changes needed.
+
+**Option B — Git Bash:** Git Bash ships with GNU coreutils, so `stat` and `date` behave the same as Linux. Apply the same Linux changes for all three functions. The only difference is the credentials path — see Change 2 below.
+
+> Git Bash requires bash 4+. The default bash shipped with Git for Windows is usually sufficient.
+> Check with `bash --version`.
+
+For the Claude Code settings file on Windows, the path is:
+```
+C:\Users\<you>\.claude\settings.json
+```
+In Git Bash this is `~/.claude/settings.json` — same as macOS/Linux.
+
+---
 
 ### Change 1 — `get_file_age()` — file modification time
 
@@ -77,7 +96,7 @@ get_file_age() {
 }
 ```
 
-**Linux (GNU stat):**
+**Linux / Windows Git Bash (GNU stat):**
 ```bash
 get_file_age() {
     local mod
@@ -101,15 +120,18 @@ local token
 token=$(echo "$keychain" | jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null)
 ```
 
-**Linux (credentials file):**
+**Linux / WSL / Windows Git Bash (credentials file):**
 ```bash
 local creds_file="$HOME/.claude/.credentials.json"
 local token
 token=$(jq -r '.claudeAiOauth.accessToken // empty' "$creds_file" 2>/dev/null)
 ```
 
-> Note: The credentials file path on Linux may vary depending on your Claude Code version.
+> The credentials file path may vary depending on your Claude Code version.
 > Check `~/.claude/` for a file named `.credentials.json` or `credentials.json`.
+>
+> On Windows (Git Bash), `$HOME` resolves to `C:\Users\<you>`, so the full path would be
+> `C:\Users\<you>\.claude\.credentials.json`.
 
 ---
 
@@ -125,7 +147,7 @@ iso_secs_left() {
 }
 ```
 
-**Linux (GNU date):**
+**Linux / WSL / Windows Git Bash (GNU date):**
 ```bash
 iso_secs_left() {
     local iso="$1"
